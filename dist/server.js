@@ -67,14 +67,18 @@ mongoose_1.default
     .connect(MONGODB_URI)
     .then(() => {
     console.log('✅ Connecté à MongoDB');
-    app.listen(PORT, () => {
-        console.log(`🚀 Serveur démarré sur http://localhost:${PORT}`);
-    });
+    startServer();
 })
     .catch((err) => {
     console.error('❌ Erreur de connexion à MongoDB', err);
-    process.exit(1);
+    console.warn('⚠️ Démarrage du serveur sans MongoDB - Certaines fonctionnalités ne seront pas disponibles');
+    startServer();
 });
+function startServer() {
+    app.listen(PORT, () => {
+        console.log(`🚀 Serveur démarré sur http://localhost:${PORT}`);
+    });
+}
 // Gestion de l'arrêt propre du serveur
 process.on('SIGINT', async () => {
     await mongoose_1.default.connection.close();
